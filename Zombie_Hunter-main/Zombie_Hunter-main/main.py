@@ -32,11 +32,9 @@ zombies_sprites = [pygame.image.load("zombie_right.png"), pygame.image.load("zom
                    pygame.image.load("zombie_up.png"), pygame.image.load("zombie_down.png"), ]
 r = pygame.Rect(50, 500, 800, 700)
 font = pygame.font.SysFont('couriernew', 40)
-doge = [pygame.image.load("doge1.png"),pygame.image.load("doge2.png"),pygame.image.load("doge3.png"),pygame.image.load("doge4.png")]
+doge = pygame.image.load("doge.png")
 health = 100
 health_bar = pygame.Rect(0, 0, health, 50)
-puppy_can_pick=True
-puppies_picked=0
 dialoge = True
 doge_x = 1
 doge_y = 1
@@ -83,6 +81,9 @@ while True:
             health_text = font.render(str(health), True, (255, 255, 255))
             screen.blit(health_text, (0, 100))
             pygame.draw.rect(screen, (255, 0, 0), health_bar, 0)
+            if x in range(doge_x - 500, doge_x + 500) and y in range(doge_y - 500, doge_y + 500):
+                pygame.quit()
+                sys.exit()
             while doge_x % 10 != 0:
                 doge_x = random.randint(0, 1200)
             while doge_y % 10 != 0:
@@ -113,7 +114,8 @@ while True:
                         object_x[0] += 10
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
                 screen.fill((60, 179, 113))
-                if event.pos[0] in range(object_x[2]-200,object_x[2]+200) and event.pos[1] in range(object_x[2]-200,object_x[2]+200):
+                if event.pos[0] in range(object_x[2] - 200, object_x[2] + 200) and event.pos[1] in range(
+                        object_x[2] - 200, object_x[2] + 200):
                     if doge_x > x:
                         hint_text = font.render(hints[0], True, (255, 255, 255))
                     elif doge_x < x:
@@ -160,15 +162,16 @@ while True:
                     object_x[5] += 10
                     zombie_x += 10
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            pygame.draw.line(screen, (255, 215, 0), (x+42, y+42), (event.pos[0], event.pos[1]), 5)
+            pygame.draw.line(screen, (255, 215, 0), (x + 42, y + 42), (event.pos[0], event.pos[1]), 5)
         if event.type == pygame.KEYDOWN:
             dialoge = False
         dialoges("черт,этот растяпа убежал.", tablet_sprites[0])
-        screen.blit(doge[puppies_picked], (doge_x, doge_y))
+        screen.blit(doge, (doge_x, doge_y))
         screen.blit(grass[grass_set[1]], (object_x[1], object_y[1]))
         screen.blit(hint_tree, (object_x[2], object_y[2]))
         screen.blit(grass[grass_set[1]], (object_x[3], object_y[3]))
     if x > zombie_x:
+
         screen.blit(zombies_sprites[0], (zombie_x, zombie_y))
         zombie_x += 1
         if zombie_x == x:
@@ -192,11 +195,4 @@ while True:
         if zombie_y == y:
             health -= 1
             zombie_y -= 50
-    if x == doge_x and y == doge_y and puppy_can_pick==True:
-        puppies_picked+=1
-        puppy_can_pick=False
-        doge_x=random.randint(0,4000)
-        doge_y=random.randint(0,4000)
-        pygame.quit()
-        sys.exit()
     pygame.display.flip()

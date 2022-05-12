@@ -57,6 +57,11 @@ loot = True
 map_end=pygame.image.load("map_end.png")
 puppy_can_pick=True
 puppies_picked=0
+boss=[pygame.image.load("boss.png"),pygame.image.load("boss_punch.png.png"),pygame.image.load("boss_jump.png.png")]
+boss_attack=0
+boss_fight=False
+boss_hp=500
+
 
 def dialoges(tablet_text, sprite):
     if dialoge == True:
@@ -206,7 +211,6 @@ while True:
             object_y[5] += speed
             zombie_y += speed
             object_y[1] += speed
-            pos_y +=speed
         elif event.pos[0] >= x and event.pos[1] in range(y - 75, y + 75):
             screen.blit(player[0], (x, y))
             object_x[0] -= speed
@@ -215,7 +219,7 @@ while True:
             object_x[3] -= speed
             object_x[4] -= speed
             object_x[5] -= speed
-            zombie_x += speed
+            zombie_x -= speed
             object_x[1] -= speed
             pos_x-=speed
         elif event.pos[0] <= x and event.pos[1] in range(y - 75, y + 75):
@@ -241,7 +245,7 @@ while True:
     screen.blit(food_text, (970, 670))
     health_bar = pygame.Rect(1040, 650, health, 20)
     pygame.draw.rect(screen, (255, 0, 0), health_bar, 0)
-    screen.blit(doge[0], (doge_x, doge_y))
+    screen.blit(doge[puppies_picked], (doge_x, doge_y))
     screen.blit(loot_box, (object_x[1], object_y[1]))
     screen.blit(hint_tree, (object_x[2], object_y[2]))
     screen.blit(grass[grass_set[1]], (object_x[3], object_y[3]))
@@ -359,20 +363,16 @@ while True:
         health -= 1
     if pos_y>=4200:
         screen.blit(map_end,(0,0))
-    map=pygame.Rect(100,300,50,50)
-    pygame.draw.rect(screen,(0,0,0),map,0)
-    map_player = pygame.Rect(pos_x/5, pos_y/5, 3, 3)
-    pygame.draw.rect(screen, (255, 255, 255), map_player, 0)
     map_doge = pygame.Rect(doge_x / 5, doge_y / 5, 3, 3)
     pygame.draw.rect(screen, (255, 0, 0), map_doge, 0)
-    if puppies_picked==4:
+    if puppies_picked==2:
         menu="win_screen"
         screen.fill((0,0,0))
         screen.blit(win_screen,(300,100))
-    if x in range(doge_x-100,doge_x+100)  and y in range(doge_x-100,doge_x+100) and puppy_can_pick==True:
+    if x in range(doge_x-200,doge_x+200)  and y in range(doge_x-200,doge_x+200) and puppy_can_pick==True:
         puppies_picked+=1
         puppy_can_pick=False
-        doge_x=random.randint(0,4000)
-        doge_y=random.randint(0,4000)
+        doge_x=random.randint(-4000,4000)
+        doge_y=random.randint(-4000,4000)
         puppy_can_pick = True
     pygame.display.flip()
